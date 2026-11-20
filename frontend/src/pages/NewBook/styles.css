@@ -1,0 +1,389 @@
+.new-book-container {
+    min-height: 100vh;
+    width: 100%;
+    padding: 40px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        #dfe3e8 0%,
+        #eef0f3 50%,
+        #d5dbe3 100%
+    );
+}
+
+/* CARD PRINCIPAL */
+
+.new-book-content {
+    width: 100%;
+    max-width: 1050px;
+    padding: 35px 50px 25px;
+
+    background: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 18px;
+
+    box-shadow: 0 12px 45px rgba(30, 40, 60, 0.10);
+}
+
+/* CABEÇALHO */
+
+.new-book-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    color: #566174;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: #3549c9;
+}
+
+.new-book-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.new-book-brand img {
+    width: 43px;
+    height: 43px;
+    object-fit: contain;
+}
+
+.new-book-brand span {
+    color: #283247;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+/* CONTEÚDO CENTRAL */
+
+.new-book-main {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 65px;
+
+    padding: 55px 10px 45px;
+}
+
+/* LADO INFORMATIVO */
+
+.new-book-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.form-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 65px;
+    height: 65px;
+    margin-bottom: 25px;
+
+    color: #3549c9;
+    background: #eef0ff;
+    border-radius: 16px;
+}
+
+.form-label {
+    color: #5669d6;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+}
+
+.new-book-info h1 {
+    margin: 15px 0;
+    color: #202938;
+    font-size: 34px;
+    line-height: 1.2;
+    font-weight: 750;
+}
+
+.new-book-info > p {
+    margin: 0;
+    color: #687486;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.form-tip {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    margin-top: 35px;
+    padding: 17px;
+
+    background: #f5f6fb;
+    border-left: 4px solid #5669d6;
+    border-radius: 7px;
+}
+
+.form-tip strong {
+    color: #3447bd;
+    font-size: 13px;
+}
+
+.form-tip span {
+    color: #626e7e;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* FORMULÁRIO */
+
+.new-book-form-section {
+    padding: 30px;
+    background: #f8f9fb;
+    border: 1px solid #edf0f4;
+    border-radius: 14px;
+}
+
+.form-heading {
+    margin-bottom: 25px;
+}
+
+.form-heading h2 {
+    margin: 0 0 7px;
+    color: #252b36;
+    font-size: 21px;
+}
+
+.form-heading span {
+    color: #7a8493;
+    font-size: 13px;
+}
+
+/* CAMPOS */
+
+.new-book-form-section form {
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    color: #394354;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.form-group input {
+    width: 100%;
+    height: 49px;
+    padding: 0 15px;
+
+    color: #252b36;
+    background: #fff;
+
+    border: 1px solid #dce1e9;
+    border-radius: 8px;
+
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+
+    transition: all 0.2s ease;
+}
+
+.form-group input::placeholder {
+    color: #a1a9b5;
+}
+
+.form-group input:focus {
+    border-color: #5266d5;
+    box-shadow: 0 0 0 3px rgba(82, 102, 213, 0.12);
+}
+
+/* BOTÕES */
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.cancel-button,
+.save-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    min-height: 46px;
+    padding: 0 20px;
+
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancel-button {
+    color: #566174;
+    background: #fff;
+    border: 1px solid #dce1e9;
+}
+
+.cancel-button:hover {
+    color: #252b36;
+    background: #f0f2f5;
+}
+
+.save-button {
+    color: #fff;
+    background: #3549c9;
+    border: 1px solid #3549c9;
+}
+
+.save-button:hover:not(:disabled) {
+    background: #2638a9;
+    border-color: #2638a9;
+    box-shadow: 0 5px 14px rgba(53, 73, 201, 0.22);
+    transform: translateY(-2px);
+}
+
+.save-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* RODAPÉ */
+
+.new-book-footer {
+    padding-top: 20px;
+    border-top: 1px solid #edf0f4;
+
+    color: #929baa;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* CARREGAMENTO */
+
+.loading-card {
+    padding: 35px 50px;
+    background: #fff;
+    border-radius: 12px;
+    color: #3549c9;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(30, 40, 60, 0.08);
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 850px) {
+    .new-book-content {
+        padding: 25px;
+    }
+
+    .new-book-main {
+        grid-template-columns: 1fr;
+        gap: 35px;
+        padding: 35px 0;
+    }
+
+    .new-book-info h1 {
+        font-size: 29px;
+    }
+
+    .form-tip {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 550px) {
+    .new-book-container {
+        padding: 15px;
+        align-items: flex-start;
+    }
+
+    .new-book-content {
+        padding: 20px 16px;
+        border-radius: 13px;
+    }
+
+    .new-book-header {
+        gap: 12px;
+    }
+
+    .new-book-brand {
+        gap: 7px;
+    }
+
+    .new-book-brand img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .new-book-brand span {
+        font-size: 11px;
+    }
+
+    .back-link {
+        font-size: 12px;
+    }
+
+    .new-book-main {
+        padding: 30px 0;
+    }
+
+    .new-book-info h1 {
+        font-size: 27px;
+    }
+
+    .new-book-info > p {
+        font-size: 14px;
+    }
+
+    .new-book-form-section {
+        padding: 20px 15px;
+    }
+
+    .form-heading h2 {
+        font-size: 19px;
+    }
+
+    .form-buttons {
+        flex-direction: column-reverse;
+    }
+
+    .cancel-button,
+    .save-button {
+        width: 100%;
+    }
+}
