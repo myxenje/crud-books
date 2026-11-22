@@ -1,11 +1,11 @@
 FROM node:24.20.0
 WORKDIR /app
-COPY package.json package-lock.json wait-for.sh startup.sh ./
+COPY package.json package-lock.json ./
 RUN apt-get update \
     && apt-get install -y netcat-openbsd \
-    && chmod +x ./wait-for.sh ./startup.sh \
     && npm install --omit=dev \
     && rm -rf /var/lib/apt/lists/*
 COPY . .
+RUN chmod +x ./wait-for.sh ./startup.sh
 EXPOSE 5000
-CMD ["./startup.sh"]
+CMD ["sh", "./startup.sh"]
