@@ -8,4 +8,4 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 COPY . .
 EXPOSE 5000
-CMD ["npm", "start"]
+CMD ["./startup.sh"]

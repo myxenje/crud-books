@@ -1,50 +1,19 @@
+const config = {
+  client: 'mysql2',
+  connection: {
+    host: process.env.DB_HOST || 'db',
+    port: Number(process.env.DB_PORT) || 3306,
+    database: process.env.DB_NAME || 'crudbook_db',
+    user: process.env.DB_USER || 'docker',
+    password: process.env.DB_PASSWORD || 'docker123',
+  },
+  migrations: {
+    directory: './src/database/migrations',
+  },
+  useNullAsDefault: true,
+};
+
 module.exports = {
-
-  development: {
-    client: 'mysql2',
-    connection: {
-      host: 'db',
-      port: 3306,
-      database: 'crudbook_db',
-      user:     'docker',
-      password: 'docker123'
-    },
-    migrations: {
-      directory: './src/database/migrations'
-    },
-    useNullAsDefault: true,
-  },
-
-  staging: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
-  },
-
-  production: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
-  }
-
+  development: config,
+  production: config,
 };

@@ -1,3 +1,3 @@
-#!/bin/sh
-npx knex migrate:latest;
-npm start;
+set -e
+npx knex migrate:latest
+exec node src/index.js
