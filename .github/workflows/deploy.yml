@@ -6,15 +6,19 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+
 permissions:
   id-token: write
   contents: read
+
 env:
   AWS_REGION: us-east-1
   ECS_CLUSTER: cluster-crud-books
+
 concurrency:
   group: deploy-${{ github.ref }}
   cancel-in-progress: false
+
 jobs:
   build-and-deploy:
     name: ${{ matrix.name }}
@@ -28,27 +32,36 @@ jobs:
             ecr_repo: crud-books-backend
             container: ctn-crud-books-backend
             ecs_service: svc-crud-books-backend
+            health_cmd: "curl -f http://127.0.0.1:5000/health || exit 1"
+            health_start_period: 60
           - name: frontend
             context: ./frontend
             ecr_repo: crud-books-frontend
             container: ctn-crud-books-frontend
             ecs_service: svc-crud-books-frontend
+            health_cmd: "wget -q -O /dev/null http://127.0.0.1/health || exit 1"
+            health_start_period: 10
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Validar build da imagem
         if: github.event_name == 'pull_request'
         run: docker build -t test-${{ matrix.name }} ${{ matrix.context }}
+
       - name: Configurar credenciais AWS (OIDC)
         if: github.event_name != 'pull_request'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
+
       - name: Login no ECR
         id: ecr
         if: github.event_name != 'pull_request'
         uses: aws-actions/amazon-ecr-login@v2
+
       - name: Build e push da imagem
         id: image
         if: github.event_name != 'pull_request'
@@ -62,6 +75,7 @@ jobs:
             "${{ matrix.context }}"
           docker push "$REGISTRY/$REPOSITORY:$TAG"
           echo "image=$REGISTRY/$REPOSITORY:$TAG" >> "$GITHUB_OUTPUT"
+
       - name: Baixar task definition atual do service
         if: github.event_name != 'pull_request'
         run: |
@@ -72,6 +86,24 @@ jobs:
           aws ecs describe-task-definition \
             --task-definition "$TASK_DEF_ARN" \
             --query taskDefinition > task-definition.json
+
+      - name: Definir health check do container
+        if: github.event_name != 'pull_request'
+        env:
+          CONTAINER: ${{ matrix.container }}
+          HEALTH_CMD: ${{ matrix.health_cmd }}
+          START_PERIOD: ${{ matrix.health_start_period }}
+        run: |
+          jq --arg c "$CONTAINER" --arg cmd "$HEALTH_CMD" --argjson sp "$START_PERIOD" '
+            (.containerDefinitions[] | select(.name == $c) | .healthCheck) = {
+              command: ["CMD-SHELL", $cmd],
+              interval: 30,
+              timeout: 5,
+              retries: 3,
+              startPeriod: $sp
+            }' task-definition.json > task-definition.tmp
+          mv task-definition.tmp task-definition.json
+
       - name: Atualizar imagem na task definition
         id: render
         if: github.event_name != 'pull_request'
@@ -80,6 +112,7 @@ jobs:
           task-definition: task-definition.json
           container-name: ${{ matrix.container }}
           image: ${{ steps.image.outputs.image }}
+
       - name: Deploy no ECS
         if: github.event_name != 'pull_request'
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
