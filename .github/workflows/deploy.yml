@@ -6,19 +6,15 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-
 permissions:
   id-token: write
   contents: read
-
 env:
   AWS_REGION: us-east-1
   ECS_CLUSTER: cluster-crud-books
-
 concurrency:
   group: deploy-${{ github.ref }}
   cancel-in-progress: false
-
 jobs:
   build-and-deploy:
     name: ${{ matrix.name }}
@@ -37,29 +33,22 @@ jobs:
             ecr_repo: crud-books-frontend
             container: ctn-crud-books-frontend
             ecs_service: svc-crud-books-frontend
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      # ---------- CI (pull requests): so valida que a imagem builda ----------
       - name: Validar build da imagem
         if: github.event_name == 'pull_request'
         run: docker build -t test-${{ matrix.name }} ${{ matrix.context }}
-
-      # ---------- CD (push na main): build, push e deploy ----------
       - name: Configurar credenciais AWS (OIDC)
         if: github.event_name != 'pull_request'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
-
       - name: Login no ECR
         id: ecr
         if: github.event_name != 'pull_request'
         uses: aws-actions/amazon-ecr-login@v2
-
       - name: Build e push da imagem
         id: image
         if: github.event_name != 'pull_request'
@@ -73,7 +62,6 @@ jobs:
             "${{ matrix.context }}"
           docker push "$REGISTRY/$REPOSITORY:$TAG"
           echo "image=$REGISTRY/$REPOSITORY:$TAG" >> "$GITHUB_OUTPUT"
-
       - name: Baixar task definition atual do service
         if: github.event_name != 'pull_request'
         run: |
@@ -84,7 +72,6 @@ jobs:
           aws ecs describe-task-definition \
             --task-definition "$TASK_DEF_ARN" \
             --query taskDefinition > task-definition.json
-
       - name: Atualizar imagem na task definition
         id: render
         if: github.event_name != 'pull_request'
@@ -93,7 +80,6 @@ jobs:
           task-definition: task-definition.json
           container-name: ${{ matrix.container }}
           image: ${{ steps.image.outputs.image }}
-
       - name: Deploy no ECS
         if: github.event_name != 'pull_request'
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
