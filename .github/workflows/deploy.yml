@@ -32,22 +32,24 @@ jobs:
             ecr_repo: crud-books-backend
             container: ctn-crud-books-backend
             ecs_service: svc-crud-books-backend
+            health_cmd: "curl -f http://127.0.0.1:5000/health || exit 1"
+            health_start_period: 60
           - name: frontend
             context: ./frontend
             ecr_repo: crud-books-frontend
             container: ctn-crud-books-frontend
             ecs_service: svc-crud-books-frontend
+            health_cmd: "wget -q -O /dev/null http://127.0.0.1/health || exit 1"
+            health_start_period: 10
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ---------- CI (pull requests): so valida que a imagem builda ----------
       - name: Validar build da imagem
         if: github.event_name == 'pull_request'
         run: docker build -t test-${{ matrix.name }} ${{ matrix.context }}
 
-      # ---------- CD (push na main): build, push e deploy ----------
       - name: Configurar credenciais AWS (OIDC)
         if: github.event_name != 'pull_request'
         uses: aws-actions/configure-aws-credentials@v4
@@ -84,6 +86,23 @@ jobs:
           aws ecs describe-task-definition \
             --task-definition "$TASK_DEF_ARN" \
             --query taskDefinition > task-definition.json
+
+      - name: Definir health check do container
+        if: github.event_name != 'pull_request'
+        env:
+          CONTAINER: ${{ matrix.container }}
+          HEALTH_CMD: ${{ matrix.health_cmd }}
+          START_PERIOD: ${{ matrix.health_start_period }}
+        run: |
+          jq --arg c "$CONTAINER" --arg cmd "$HEALTH_CMD" --argjson sp "$START_PERIOD" '
+            (.containerDefinitions[] | select(.name == $c) | .healthCheck) = {
+              command: ["CMD-SHELL", $cmd],
+              interval: 30,
+              timeout: 5,
+              retries: 3,
+              startPeriod: $sp
+            }' task-definition.json > task-definition.tmp
+          mv task-definition.tmp task-definition.json
 
       - name: Atualizar imagem na task definition
         id: render
