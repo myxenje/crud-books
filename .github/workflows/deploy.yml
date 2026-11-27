@@ -2,9 +2,9 @@ name: CI/CD - ECR + ECS
 
 on:
   pull_request:
-    branches: [main]
+    branches: [cicd-aws]
   push:
-    branches: [main]
+    branches: [cicd-aws]
   workflow_dispatch:
 
 permissions:

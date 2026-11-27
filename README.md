@@ -380,4 +380,4 @@ crud-books/
 
 Michel Cardoso
 
-Projeto desenvolvido para fins de estudo e prática de tecnologias voltadas para desenvolvimento back-end, infraestrutura, aws cloud e containerização.
+Projeto desenvolvido para fins de estudo e prática de tecnologias voltadas para desenvolvimento FullStack, infraestrutura, aws cloud e containerização.
