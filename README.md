@@ -37,9 +37,9 @@ O foco do projeto é a **infraestrutura em nuvem**: rede própria (VPC com subne
 
 ## 🏗 Arquitetura na AWS
 
-![Arquitetura do OrderFlow](docs/images/arq-orderflow-aws.png)
+![Arquitetura do OrderFlow](docs/images/arq-crud-books-aws.png)
 
-O diagrama completo (com CIDRs, Security Groups, IAM e rotas) está em [`docs/arq-aws-crud-books.drawio`](docs/arq-aws-crud-books.drawio) e pode ser aberto em [app.diagrams.net](https://app.diagrams.net).
+O diagrama em draw.io (com CIDRs, Security Groups, IAM e rotas) está em [`docs/images/arq-crud-books-aws.drawio`](docs/images/arq-crud-books-aws.drawio) e pode ser aberto em [app.diagrams.net](https://app.diagrams.net).
 
 ### Fluxo de uma requisição
 
