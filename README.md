@@ -37,37 +37,9 @@ O foco do projeto é a **infraestrutura em nuvem**: rede própria (VPC com subne
 
 ## 🏗 Arquitetura na AWS
 
-```mermaid
-flowchart LR
-    DEV([Desenvolvedor]) -->|git push| GH[GitHub]
-    USER([Cliente / Postman]) -->|HTTP :80| ALB
+![Arquitetura do OrderFlow](docs/images/arq-orderflow-aws.png)
 
-    subgraph CICD["CI/CD - GitHub Actions"]
-        direction TB
-        GA["Workflow deploy.yml<br/>OIDC, sem access keys"] -->|docker push| ECR[(Amazon ECR)]
-    end
-
-    GH -->|push na main| GA
-    GA -->|nova revisão + update-service| ECS
-
-    subgraph VPC["VPC 10.0.0.0/16 - us-east-1"]
-        subgraph PUB[Subnets públicas]
-            ALB["Application Load Balancer<br/>/api/* backend / demais frontend"]
-            NAT[NAT Gateway]
-        end
-        subgraph PRIV[Subnets privadas]
-            ECS["ECS Fargate<br/>frontend :80 e backend :5000"]
-            RDS[("RDS MySQL<br/>porta 3306")]
-        end
-    end
-
-    ALB -->|TCP 80 e 5000| ECS
-    ECS -->|TCP 3306| RDS
-    ECS -.->|saída 443 via NAT| NAT
-    ECR -.->|pull da imagem| ECS
-```
-
-> O diagrama completo (com CIDRs, Security Groups, IAM e rotas) está em [`docs/arq-aws-crud-books.drawio`](docs/arq-aws-crud-books.drawio) e pode ser aberto em [app.diagrams.net](https://app.diagrams.net).
+O diagrama completo (com CIDRs, Security Groups, IAM e rotas) está em [`docs/arq-aws-crud-books.drawio`](docs/arq-aws-crud-books.drawio) e pode ser aberto em [app.diagrams.net](https://app.diagrams.net).
 
 ### Fluxo de uma requisição
 
